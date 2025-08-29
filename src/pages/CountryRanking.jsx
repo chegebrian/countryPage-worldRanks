@@ -1,8 +1,13 @@
 import React from 'react'
+import Button from '../ui/Button'
+import Table from '../components/Table'
 
 function CountryRanking() {
   return (
-    <div>CountryRanking</div>
+    <div className='grid grid-cols-4'>
+    {/* <Button/> */}
+    <Table/>
+    </div>
   )
 }
 
