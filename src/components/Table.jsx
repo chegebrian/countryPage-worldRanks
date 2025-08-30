@@ -23,9 +23,9 @@ function Table() {
 
     ];
     return (
-        <table className='bg-[#282B30] table-auto border-collapse'>
+        <table className='bg-[#1B1D1F] table-auto border-collapse col-span-3'>
             <thead>
-                <tr className='text-[#D2D5DA] border border-[#D2D5DA]'>
+                <tr className='text-[#D2D5DA] border-b-2 border-b-[#282B30] '>
                     {tableColumns?.map((column, index) => <th className='capitalize text-start' key={index}>{column.header}</th>)}
                 </tr>
             </thead>
@@ -35,7 +35,6 @@ function Table() {
                         data[column.accessor]
                     }</td>)}
                 </tr>)}
-
             </tbody>
         </table>
     )
