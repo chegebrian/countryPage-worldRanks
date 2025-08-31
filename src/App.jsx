@@ -4,6 +4,7 @@ import WorldRanksLayout from './WorldRanksLayout'
 import CountryRanking from './pages/CountryRanking'
 
 import './App.css'
+import Info from './pages/Info'
 
 
 function App() {
@@ -15,7 +16,7 @@ function App() {
         <Route path='/' element={<WorldRanksLayout />}>
           <Route index element={<Navigate replace to="worldRanks" />} />
           <Route path='worldRanks' element={<CountryRanking />} />
-          {/* <Route path='info'/> */}
+          <Route path='info' element={<Info/>}/>
         </Route>
         <Route path='*' element={<p>path not found</p>} />
       </Routes>
