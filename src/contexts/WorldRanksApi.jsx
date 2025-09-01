@@ -5,6 +5,7 @@ const worldRanksContext = createContext()
 
 
 function WorldRanksProvider({ children }) {
+    const formatter = new Intl.NumberFormat("en-us")
     const [query, setQuery] = useState("")
     function handleQuery(e) {
         setQuery(e.target.value)
@@ -17,7 +18,7 @@ function WorldRanksProvider({ children }) {
 
     const [countries, setCountries] = useState([])
     // console.log(countries);
-    
+
 
     useEffect(() => {
         async function fetchData() {
@@ -33,8 +34,21 @@ function WorldRanksProvider({ children }) {
         }
         fetchData()
     }, [])
+    
+    function handleFilteredCountries(query, countries) {
+                
+        // const x = countries?.filter((country) => country.region.toLowerCase() === query.toLowerCase()  || country.name.common.toLowerCase() === query.toLowerCase());
+        // console.log(x);
+        
+        if (query) return countries?.filter((country) => country.region.toLowerCase() === query.toLowerCase()  || country.name.common.toLowerCase() === query.toLowerCase())
+        if (!query) return countries
+    }
+
+    const filteredCountries = handleFilteredCountries(query, countries)
+    
+
     return (
-        <worldRanksContext.Provider value={{ query, handleQuery, selectedValue, handleSelectedValue, countries }}>{children}</worldRanksContext.Provider>
+        <worldRanksContext.Provider value={{filteredCountries, query, handleQuery, selectedValue, handleSelectedValue, countries, formatter }}>{children}</worldRanksContext.Provider>
     )
 }
 
