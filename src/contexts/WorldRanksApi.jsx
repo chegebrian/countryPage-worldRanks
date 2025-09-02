@@ -14,7 +14,14 @@ function WorldRanksProvider({ children }) {
     const [selectedValue, setSelectedValue] = useState("")
     function handleSelectedValue(e) {
         setSelectedValue(e.target.value)
+
     }
+
+    // const [checked, setChecked] = useState()
+
+    // function handleChecked(){
+    //     setChecked()
+    // }
 
     const [countries, setCountries] = useState([])
     // console.log(countries);
@@ -23,7 +30,7 @@ function WorldRanksProvider({ children }) {
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await fetch("https://restcountries.com/v3.1/all?fields=name,flags,population,area,region,borders,capital,subregion,currencies,continents")
+                const response = await fetch("https://restcountries.com/v3.1/all?fields=name,flags,population,area,region,borders,independent,subregion,currencies,continents")
                 if (!response.ok) throw new Error("failed to fetch countries data")
                 const data = await response.json()
                 setCountries(data)
@@ -34,21 +41,73 @@ function WorldRanksProvider({ children }) {
         }
         fetchData()
     }, [])
-    
+
     function handleFilteredCountries(query, countries) {
-                
+
         // const x = countries?.filter((country) => country.region.toLowerCase() === query.toLowerCase()  || country.name.common.toLowerCase() === query.toLowerCase());
         // console.log(x);
-        
-        if (query) return countries?.filter((country) => country.region.toLowerCase() === query.toLowerCase()  || country.name.common.toLowerCase() === query.toLowerCase())
+
+        if (query) return countries?.filter((country) => country.region.toLowerCase() === query.toLowerCase() || country.name.common.toLowerCase() === query.toLowerCase())
         if (!query) return countries
     }
 
     const filteredCountries = handleFilteredCountries(query, countries)
+
+    const regions = filteredCountries.map((filteredCountry) => filteredCountry.region)
+    // console.log(regions);
+
+    const selectedRegions = [...new Set(regions)]
+    // console.log(selectedRegions);
+
+    function handleSort(filteredCountries) {
+        // let oufilteredCountries = filteredCountries.slice(0, 5)
+        let oufilteredCountries = filteredCountries
+        if (!selectedValue) return oufilteredCountries;
+
+        //  sort by name
+        if (selectedValue === "name-asc") {
+            return oufilteredCountries.toSorted((a, b) => a.name.common.localeCompare(b.name.common));
+        }
+        if (selectedValue === "name-desc") {
+            return oufilteredCountries.toSorted((a, b) => b.name.common.localeCompare(a.name.common));
+        }
+
+        // sort by region
+
+        if (selectedValue === "region-asc") {
+            return oufilteredCountries.toSorted((a, b) => a.region.localeCompare(b.region));
+        }
+        if (selectedValue === "region-desc") {
+            return oufilteredCountries.toSorted((a, b) => b.region.localeCompare(a.region));
+        }
+
+        // sort by population
+
+        if (selectedValue === "population-asc") {
+            return oufilteredCountries.toSorted((a, b) => a.population - b.population);
+        }
+        if (selectedValue === "population-desc") {
+            return oufilteredCountries.toSorted((a, b) => b.population - a.population);
+        }
+
+        // sort by area
+
+        if (selectedValue === "area-asc") {
+            return oufilteredCountries.toSorted((a, b) => a.area - b.area);
+        }
+        if (selectedValue === "area-desc") {
+            return oufilteredCountries.toSorted((a, b) => b.area - a.area);
+        }
+
+
+    }
+
     
 
+    const sortedCountries = handleSort(filteredCountries)
+
     return (
-        <worldRanksContext.Provider value={{filteredCountries, query, handleQuery, selectedValue, handleSelectedValue, countries, formatter }}>{children}</worldRanksContext.Provider>
+        <worldRanksContext.Provider value={{ filteredCountries,sortedCountries, query, selectedRegions, handleQuery, selectedValue, handleSelectedValue, countries, formatter }}>{children}</worldRanksContext.Provider>
     )
 }
 

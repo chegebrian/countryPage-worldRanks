@@ -2,7 +2,7 @@ import React from 'react'
 import { useWorldRanksApi } from '../contexts/WorldRanksApi';
 
 function Table() {
-    const { countries, formatter, filteredCountries } = useWorldRanksApi()
+    const { countries, formatter, filteredCountries, sortedCountries } = useWorldRanksApi()
 
     const tableColumns = [
         { header: "flag", accessor: "flags" },
@@ -20,7 +20,7 @@ function Table() {
                 </tr>
             </thead>
             <tbody className=''>
-                {filteredCountries?.map((country, index) => <tr className='text-[#D2D5DA]' key={index}>
+                {sortedCountries?.map((country, index) => <tr className='text-[#D2D5DA]' key={index}>
                     <td className=''><img src={country.flags.svg} alt={country.flags.alt} className='rounded-md w-20' /></td>
                     <td>{country.name.common}</td>
                     <td>{formatter.format(country.population)}</td>
