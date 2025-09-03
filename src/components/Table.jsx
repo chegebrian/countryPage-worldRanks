@@ -1,8 +1,11 @@
 import React from 'react'
 import { useWorldRanksApi } from '../contexts/WorldRanksApi';
+import { NavLink, useNavigate } from 'react-router';
 
 function Table() {
     const { formatter, sortedCountries } = useWorldRanksApi()
+
+    const navigate = useNavigate()
 
     const tableColumns = [
         { header: "flag", accessor: "flags" },
@@ -20,13 +23,17 @@ function Table() {
                 </tr>
             </thead>
             <tbody className=''>
-                {sortedCountries?.map((country, index) => <tr className='text-[#D2D5DA]' key={index}>
-                    <td className=''><img src={country.flags.svg} alt={country.flags.alt} className='rounded-md w-20' /></td>
-                    <td>{country.name.common}</td>
-                    <td>{formatter.format(country.population)}</td>
-                    <td>{formatter.format(country.area)}</td>
-                    <td>{country.region}</td>
-                </tr>)}
+                {sortedCountries?.map((country, index) =>
+                    <tr className='text-[#D2D5DA] cursor-pointer' key={index} onClick={() => navigate(`/worldRanks/${country.name.common}`)}>
+
+                        <td className=''><img src={country.flags.svg} alt={country.flags.alt} className='rounded-md w-20' /></td>
+                        <td>{country.name.common}</td>
+                        <td>{formatter.format(country.population)}</td>
+                        <td>{formatter.format(country.area)}</td>
+                        <td>{country.region}</td>
+
+                    </tr>
+                )}
             </tbody>
         </table>
     )
