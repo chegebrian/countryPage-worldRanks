@@ -39,7 +39,7 @@ function WorldRanksProvider({ children }) {
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await fetch("https://restcountries.com/v3.1/all?fields=name,flags,population,area,region,borders,independent,subregion,currencies,continents")
+                const response = await fetch("https://restcountries.com/v3.1/all?fields=name,flags,population,area,region,borders,independent,subregion,currencies,cca3")
                 if (!response.ok) throw new Error("failed to fetch countries data")
                 const data = await response.json()
                 setCountries(data)
