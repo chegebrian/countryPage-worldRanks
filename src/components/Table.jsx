@@ -2,7 +2,7 @@ import React from 'react'
 import { useWorldRanksApi } from '../contexts/WorldRanksApi';
 
 function Table() {
-    const { countries, formatter, filteredCountries, sortedCountries } = useWorldRanksApi()
+    const { formatter, sortedCountries } = useWorldRanksApi()
 
     const tableColumns = [
         { header: "flag", accessor: "flags" },

@@ -3,7 +3,7 @@ import { useWorldRanksApi } from '../contexts/WorldRanksApi'
 import Button from '../ui/Button'
 
 function Aside() {
-    const { selectedValue, handleSelectedValue, selectedRegions } = useWorldRanksApi()
+    const { selectedValue, handleSelectedValue, handleSelectedRegion, selectedRegions, checkedMembers, handleCheckedMembers, checkedIndependent, handleCheckedIndependent } = useWorldRanksApi()
     return (
         <aside className='flex flex-col gap-6'>
             <div className='flex flex-col gap-2'>
@@ -23,18 +23,20 @@ function Aside() {
             <div>
                 <p className='text-[#D2D5DA] font-bold mb-2'>Region</p>
                 <div className='flex items-center gap-2 flex-wrap'>
-                    {selectedRegions?.map((region, index) => <Button key={index}>{region}</Button>)}
+                    <button value="all" onClick={handleSelectedRegion} className='rounded-md cursor-pointer font-semibold px-4 py-1 bg-[#6C727F] text-[#D2D5DA]'>all</button>
+                    {selectedRegions?.map((region, index) => <Button key={index} value={region}>{region}</Button>)}
                 </div>
 
             </div>
             <div>
                 <p className='text-[#D2D5DA] font-bold'>Status</p>
                 <div>
-                    <input type="checkbox" name="members of the united nations" id="united" className='text-[#D2D5DA]' />
+                    <input type="checkbox" value={checkedMembers}
+                        checked={checkedMembers} onChange={handleCheckedMembers} name="members of the united nations" id="united" className='text-[#D2D5DA]' />
                     <label htmlFor="united" className='text-[#D2D5DA] ml-2'>Members of the united nations</label>
                 </div>
                 <div>
-                    <input type="checkbox" name="independent nations" id="independent" className='text-[#D2D5DA]' />
+                    <input type="checkbox" checked={checkedIndependent} onChange={handleCheckedIndependent} value={checkedIndependent} name="independent nations" id="independent" className='text-[#D2D5DA]' />
                     <label htmlFor="independent" className='text-[#D2D5DA] ml-2'>independent</label>
                 </div>
             </div>

@@ -17,15 +17,24 @@ function WorldRanksProvider({ children }) {
 
     }
 
-    // const [checked, setChecked] = useState()
+    const [checkedMembers, setCheckedMembers] = useState(false)
 
-    // function handleChecked(){
-    //     setChecked()
-    // }
+    function handleCheckedMembers() {
+        setCheckedMembers(checkedMembers => !checkedMembers)
+    }
+    const [checkedIndependent, setCheckedIndependent] = useState(false)
+
+    function handleCheckedIndependent() {
+        setCheckedIndependent(checkedIndependent => !checkedIndependent)
+    }
+
+    const [selectedCategory, setSelectedCategory] = useState("all")
+
+    function handleSelectedRegion(e) {
+        setSelectedCategory(e.target.value)
+    }
 
     const [countries, setCountries] = useState([])
-    // console.log(countries);
-
 
     useEffect(() => {
         async function fetchData() {
@@ -42,25 +51,30 @@ function WorldRanksProvider({ children }) {
         fetchData()
     }, [])
 
-    function handleFilteredCountries(query, countries) {
+    function handleFilteredCountries(query, countries, checkedMembers, checkedIndependent, selectedCategory) {
 
-        // const x = countries?.filter((country) => country.region.toLowerCase() === query.toLowerCase()  || country.name.common.toLowerCase() === query.toLowerCase());
-        // console.log(x);
+        let filteredItems = countries;
 
-        if (query) return countries?.filter((country) => country.region.toLowerCase() === query.toLowerCase() || country.name.common.toLowerCase() === query.toLowerCase())
-        if (!query) return countries
+        if (query) filteredItems = countries?.filter((country) => country.region.toLowerCase().includes(query.toLowerCase()) || country.name.common.toLowerCase().includes(query.toLowerCase()))
+        if (selectedCategory !== "all") filteredItems = filteredItems?.filter((filterItem) => filterItem.region === selectedCategory)
+        if (checkedMembers) filteredItems = filteredItems?.filter((country) => country.independent === true)
+        if (checkedIndependent) filteredItems = filteredItems?.filter((country) => country.independent === false)
+        if (checkedMembers && checkedIndependent) filteredItems = countries;
+        
+        return filteredItems;
+
     }
 
-    const filteredCountries = handleFilteredCountries(query, countries)
+    const filteredCountries = handleFilteredCountries(query, countries, checkedMembers, checkedIndependent, selectedCategory)
 
-    const regions = filteredCountries.map((filteredCountry) => filteredCountry.region)
-    // console.log(regions);
+    const regions = filteredCountries?.map((filteredCountry) => filteredCountry.region)
+    
 
     const selectedRegions = [...new Set(regions)]
-    // console.log(selectedRegions);
+    
 
     function handleSort(filteredCountries) {
-        // let oufilteredCountries = filteredCountries.slice(0, 5)
+        
         let oufilteredCountries = filteredCountries
         if (!selectedValue) return oufilteredCountries;
 
@@ -102,12 +116,12 @@ function WorldRanksProvider({ children }) {
 
     }
 
-    
+
 
     const sortedCountries = handleSort(filteredCountries)
 
     return (
-        <worldRanksContext.Provider value={{ filteredCountries,sortedCountries, query, selectedRegions, handleQuery, selectedValue, handleSelectedValue, countries, formatter }}>{children}</worldRanksContext.Provider>
+        <worldRanksContext.Provider value={{ handleSelectedRegion, checkedIndependent, handleCheckedIndependent, checkedMembers, handleCheckedMembers, filteredCountries, sortedCountries, query, selectedRegions, handleQuery, selectedValue, handleSelectedValue, countries, formatter }}>{children}</worldRanksContext.Provider>
     )
 }
 
